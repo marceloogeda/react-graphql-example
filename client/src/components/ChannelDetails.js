@@ -8,9 +8,9 @@ import {
     graphql,
 } from 'react-apollo';
 
-const ChannelDetails = ({ data: { loading, error, channel }, match }) => {
+const ChannelDetails = ({ data: {loading, error, channel }, match }) => {
   if (loading) {
-    return <ChannelPreview channelId={match.params.channelId} />;
+    return <ChannelPreview channelId={match.params.channelId}/>;
   }
   if (error) {
     return <p>{error.message}</p>;
@@ -18,18 +18,18 @@ const ChannelDetails = ({ data: { loading, error, channel }, match }) => {
   if(channel === null){
     return <NotFound />
   }
+
   return (
     <div>
       <div className="channelName">
         {channel.name}
       </div>
       <MessageList messages={channel.messages}/>
-    </div>
-  );
+    </div>);
 }
 
 export const channelDetailsQuery = gql`
-  query ChannelDetailsQuery($channelId: ID!) {
+  query ChannelDetailsQuery($channelId : ID!) {
     channel(id: $channelId) {
       id
       name
@@ -41,8 +41,8 @@ export const channelDetailsQuery = gql`
   }
 `;
 
-export default graphql(channelDetailsQuery, {
-  options: props => ({
-    variables: { channelId: props.match.params.channelId }
-  })
-})(ChannelDetails);
+export default (graphql(channelDetailsQuery, {
+  options: (props) => ({
+    variables: { channelId: props.match.params.channelId },
+  }),
+})(ChannelDetails));

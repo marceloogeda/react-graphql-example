@@ -40,16 +40,12 @@ const client = new ApolloClient({
   customResolvers: {
     Query: {
       channel: (_, args) => {
-        return toIdValue(dataIdFromObject({
-          __typename: 'Channel',
-          id: args['id']
-        }))
-      }
-    }
+        return toIdValue(dataIdFromObject({ __typename: 'Channel', id: args['id'] }))
+      },
+    },
   },
   dataIdFromObject,
 });
-
 
 class App extends Component {
   render() {
