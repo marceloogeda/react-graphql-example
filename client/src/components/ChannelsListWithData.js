@@ -1,26 +1,35 @@
 import React from 'react';
 import {
+  Link
+} from 'react-router-dom'
+
+import {
     gql,
     graphql,
 } from 'react-apollo';
 
-import AddChannelWithMudation from './AddChannelWithMudation';
+import AddChannel from './AddChannel';
 
 const ChannelsList = ({ data: {loading, error, channels }}) => {
   if (loading) {
     return <p>Loading ...</p>;
   }
-
   if (error) {
     return <p>{error.message}</p>;
   }
 
   return (
     <div className="channelsList">
-      <AddChannelWithMudation />
-      { channels.map( ch => <li key={ch.id}>{ch.name}</li> ) }
+      <AddChannel />
+      { channels.map( ch =>
+        (<div key={ch.id} className={'channel ' + (ch.id < 0 ? 'optimistic' : '')}>
+          <Link to={ch.id < 0 ? `/` : `channel/${ch.id}`}>
+            {ch.name}
+          </Link>
+        </div>)
+      )}
     </div>
-  )
+  );
 };
 
 export const channelsListQuery = gql`
