@@ -1,3 +1,7 @@
+import { PubSub, withFilter } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
+
 const channels = [{
   id: '1',
   name: 'soccer',
@@ -44,7 +48,23 @@ export const resolvers = {
 
       const newMessage = { id: String(nextMessageId++), text: message.text };
       channel.messages.push(newMessage);
+
+      pubsub.publish('messageAdded', {
+        messageAdded: newMessage,
+        channelId: message.channelId
+      });
+
       return newMessage;
     },
-  },
+    Subscription: {
+      messageAdded: {
+        subscribe: withFilter(
+          () => pubsub.asyncIterator('messageAdded'),
+          (payload, variables) => {
+            return payload.channelId === variables.channelId;
+          }
+        )
+      }
+    }
+  }
 };
