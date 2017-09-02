@@ -34,6 +34,7 @@ type Mutation {
   addMessage(message: MessageInput!): Message
 }
 
+# The subscription root type, specifying what we can subscribe to
 type Subscription {
   messageAdded(channelId: ID!): Message
 }
